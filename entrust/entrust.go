@@ -3,6 +3,7 @@ package entrust
 import "github.com/xiaomLee/trade-engine/entrust/queue"
 
 type Entrust struct {
+	Id          string
 	EntrustType string
 	CoinType    string
 	BidType     uint8 // 买卖方向
@@ -11,8 +12,8 @@ type Entrust struct {
 	Price       float64
 }
 
-func (e *Entrust) Value() interface{} {
-	return e.Price
+func (e *Entrust) Key() string {
+	return e.Id
 }
 
 func (e *Entrust) Compare(item queue.Item) int {
