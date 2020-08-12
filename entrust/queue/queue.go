@@ -73,6 +73,9 @@ func (q *Queue) AddItem(item Item) error {
 }
 
 func (q *Queue) FindPosition(item Item) (bucketPos, dataPos int) {
+	if len(q.buckets) == 0 {
+		return -1, -1
+	}
 	for index, b := range q.buckets {
 		bucketPos = index
 		if _, ok := b.dataMap[item.Key()]; ok {
@@ -101,8 +104,11 @@ func (q *Queue) FindPosition(item Item) (bucketPos, dataPos int) {
 
 func (q *Queue) Remove(item Item) error {
 	i, j := q.FindPosition(item)
-	b := q.buckets[i]
+	if i < 0 {
+		return nil
+	}
 
+	b := q.buckets[i]
 	// this bucket has only one item, remove this bucket
 	if b.n == 1 {
 		dst := make([]*bucket, i)
